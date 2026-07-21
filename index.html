@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CYBERLAB // Next-Gen Security & CS Academy</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- NAVIGATION HEADER -->
+    <header>
+      <div class="logo">CYBER<span>LAB</span> //</div>
+      <nav>
+        <button class="active" onclick="switchView('threats', this)">
+          Live Threat Radar
+        </button>
+        <button onclick="switchView('breakdowns', this)">
+          Threat Breakdowns
+        </button>
+        <button onclick="switchView('courses', this)">Courses Directory</button>
+        <button onclick="switchView('quizzes', this)">Knowledge Check</button>
+        <button onclick="switchView('terminal', this)">Simulated CLI</button>
+        <button class="btn-pro" onclick="openPaywall()">GET PRO ($9/mo)</button>
+      </nav>
+    </header>
+
+    <div class="container">
+      <!-- VIEW 1: LIVE THREAT MAP & INTEL -->
+      <section id="threats" class="view-section active">
+        <div class="metrics-row">
+          <div class="metric-box">
+            <div class="metric-label">TOP ATTACK VECTOR (24H)</div>
+            <div class="metric-value metric-alert">SQL Injection / RCE</div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-label">ACTIVE BOTNET DETECTED</div>
+            <div class="metric-value">Mirai Variant #802</div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-label">GLOBAL TELEMETRY RATE</div>
+            <div class="metric-value">14,290 req/sec</div>
+          </div>
+        </div>
+
+        <div class="threat-grid">
+          <div class="card">
+            <h2><span>●</span> Global Threat Radar</h2>
+            <canvas id="threatMapCanvas"></canvas>
+          </div>
+          <div class="card">
+            <h2><span>⚡</span> Real-Time Exploit Feed</h2>
+            <div class="feed-list" id="threatFeed"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 2: RECENT THREAT BREAKDOWNS -->
+      <section id="breakdowns" class="view-section">
+        <h1 class="section-title">
+          // Threat Intelligence & Incident Deconstruction
+        </h1>
+        <p class="section-desc">
+          Analyze how recent real-world attacks were executed and the exact
+          mitigation steps needed to defend against them.
+        </p>
+
+        <div class="breakdown-container">
+          <!-- Attack Case Study 1 -->
+          <div class="breakdown-card">
+            <div class="breakdown-header">
+              <div>
+                <span class="tag tag-pro">Critical Threat</span>
+                <h2>Supply Chain Incident: Malicious Dependency Poisoning</h2>
+              </div>
+              <div class="date-badge">24h AGO</div>
+            </div>
+
+            <div class="breakdown-body">
+              <h3>1. How the Attack Was Pulled Off</h3>
+              <p>
+                Attackers compromised a popular open-source utility package by
+                registering a typo-squatted domain and gaining maintainer
+                credentials through credential stuffing. They injected an
+                obfuscated loader script into the build pipeline that
+                exfiltrated environment variables and API keys during `npm
+                install` execution.
+              </p>
+
+              <h3>2. Attack Vector Analysis</h3>
+              <ul class="intel-list">
+                <li>
+                  <strong>Vector:</strong> Typosquatting / Credential Harvesting
+                </li>
+                <li>
+                  <strong>Impact:</strong> Remote Code Execution (RCE) on CI/CD
+                  Runners
+                </li>
+                <li>
+                  <strong>Payload:</strong> Base64-encoded reverse shell via
+                  NodeJS child process
+                </li>
+              </ul>
+
+              <h3>3. How to Defend & Mitigate</h3>
+              <div class="code-block">
+                <code
+                  ># Lock down package dependencies using lockfile integrity
+                  checks<br />npm ci --ignore-scripts<br /># Scan project for
+                  vulnerable or malicious packages<br />npm audit
+                  --audit-level=high</code
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Attack Case Study 2 -->
+          <div class="breakdown-card">
+            <div class="breakdown-header">
+              <div>
+                <span class="tag tag-free">Free Breakdown</span>
+                <h2>Active Directory Pass-the-Hash Exploit</h2>
+              </div>
+              <div class="date-badge">3 DAYS AGO</div>
+            </div>
+
+            <div class="breakdown-body">
+              <h3>1. How the Attack Was Pulled Off</h3>
+              <p>
+                After acquiring local admin access via a phishing payload,
+                attackers used Mimikatz to dump NTLM password hashes directly
+                from the LSASS memory space. Using the extracted hash, they
+                authenticated to adjacent domain controllers via SMB without
+                needing the plaintext password.
+              </p>
+
+              <h3>2. How to Defend & Mitigate</h3>
+              <ul class="intel-list">
+                <li>
+                  <strong>Enable LSA Protection:</strong> Prevent non-system
+                  processes from inspecting LSASS memory.
+                </li>
+                <li>
+                  <strong>Credential Guard:</strong> Enable Virtualization-based
+                  Security (VBS) on Windows endpoints.
+                </li>
+                <li>
+                  <strong>Implement PAM:</strong> Restrict local administrator
+                  password reuse using Microsoft LAPS.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 3: COURSE DIRECTORY -->
+      <section id="courses" class="view-section">
+        <h1 class="section-title">// Learning Tracks</h1>
+        <div class="courses-grid">
+          <div class="course-card">
+            <div>
+              <span class="tag tag-free">Free Tier</span>
+              <div class="course-title">Linux Fundamentals & Shell</div>
+              <div class="course-desc">
+                Master the terminal, file permissions, process management, and
+                sysadmin essential commands.
+              </div>
+            </div>
+            <button class="btn-action" onclick="switchView('terminal')">
+              Start Fundamentals
+            </button>
+          </div>
+
+          <div class="course-card">
+            <div>
+              <span class="tag tag-free">Free Tier</span>
+              <div class="course-title">Bash Scripting Automation</div>
+              <div class="course-desc">
+                Automate security audits, write loop scripts, and parse log
+                files using grep, awk, and sed.
+              </div>
+            </div>
+            <button class="btn-action" onclick="switchView('terminal')">
+              Start Fundamentals
+            </button>
+          </div>
+
+          <div class="course-card">
+            <div>
+              <span class="tag tag-pro">Pro Access</span>
+              <div class="course-title">Cisco IOS & Network Engineering</div>
+              <div class="course-desc">
+                CCNA & CCNP CLI simulation. Practice VLAN configuration, OSPF
+                routing, and Access Control Lists (ACLs).
+              </div>
+            </div>
+            <button class="btn-action" onclick="openPaywall()">
+              Unlock Pro Course
+            </button>
+          </div>
+
+          <div class="course-card">
+            <div>
+              <span class="tag tag-pro">Pro Access</span>
+              <div class="course-title">Wireshark & Packet Analysis</div>
+              <div class="course-desc">
+                Deep dive into TCP/IP packet disassembly, network forensics, and
+                sniffing malicious payloads.
+              </div>
+            </div>
+            <button class="btn-action" onclick="openPaywall()">
+              Unlock Pro Course
+            </button>
+          </div>
+
+          <div class="course-card">
+            <div>
+              <span class="tag tag-pro">Pro Access</span>
+              <div class="course-title">Rust Systems Programming</div>
+              <div class="course-desc">
+                Build memory-safe exploits, network scanners, and custom
+                security tooling from scratch in Rust.
+              </div>
+            </div>
+            <button class="btn-action" onclick="openPaywall()">
+              Unlock Pro Course
+            </button>
+          </div>
+
+          <div class="course-card">
+            <div>
+              <span class="tag tag-pro">Pro Access</span>
+              <div class="course-title">C++ Exploit Development</div>
+              <div class="course-desc">
+                Understand memory layout, buffer overflows, pointer
+                manipulation, and low-level reverse engineering.
+              </div>
+            </div>
+            <button class="btn-action" onclick="openPaywall()">
+              Unlock Pro Course
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 4: QUIZZES MODULE -->
+      <section id="quizzes" class="view-section">
+        <h1 class="section-title">// Interactive Knowledge Checks</h1>
+        <div class="quiz-container card">
+          <div id="quizBox">
+            <div class="quiz-progress" id="quizProgress">Question 1 of 3</div>
+            <h2 class="quiz-question" id="quizQuestion">Loading question...</h2>
+            <div class="quiz-options" id="quizOptions"></div>
+            <button
+              class="btn-action"
+              id="nextQuizBtn"
+              style="margin-top: 1.5rem; display: none"
+              onclick="nextQuestion()"
+            >
+              Next Question
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 5: SIMULATED TERMINAL / CLI -->
+      <section id="terminal" class="view-section">
+        <div class="terminal-container">
+          <div class="terminal-header">
+            <div>
+              Mode:
+              <select id="cliModeSelect" onchange="changeCliMode(this.value)">
+                <option value="bash">Linux / Bash Shell</option>
+                <option value="cisco">Cisco IOS Router (CCNA Sim)</option>
+              </select>
+            </div>
+            <div class="terminal-status">
+              Status: CONNECTED (LOCAL SIMULATOR)
+            </div>
+          </div>
+
+          <div class="terminal-output" id="terminalOutput">
+            CYBERLAB Interactive CLI v1.0 Type 'help' to see available commands
+            for this environment.
+            ----------------------------------------------------------------------
+          </div>
+
+          <div class="terminal-input-line">
+            <span class="prompt" id="cliPrompt">user@cyberlab:~$</span>
+            <input
+              type="text"
+              class="terminal-input"
+              id="cliInput"
+              autofocus
+              onkeydown="handleTerminalKey(event)"
+            />
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- PAYWALL MODAL -->
+    <div class="modal-overlay" id="paywallModal">
+      <div class="modal">
+        <h2>UNLOCK FULL ACCESS</h2>
+        <p class="modal-subtitle">
+          Master Cisco CCNA/CCNP, Wireshark, Exploit Dev, and Advanced Security
+          Tools.
+        </p>
+        <div class="price">$9 <span>/ month</span></div>
+        <ul class="modal-features">
+          <li>✓ Simulated Cisco IOS CLI Labs</li>
+          <li>✓ Wireshark Forensics Simulations</li>
+          <li>✓ C++, Rust, & Java Cyber Tracks</li>
+          <li>✓ Real-Time Threat Analysis Reports</li>
+        </ul>
+        <button
+          class="btn-action btn-subscribe"
+          onclick="alert('Redirecting to Payment Gateway (Stripe)...')"
+        >
+          SUBSCRIBE NOW
+        </button>
+        <button class="btn-close" onclick="closePaywall()">Close Window</button>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
